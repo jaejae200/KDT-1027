@@ -22,7 +22,4 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment 
-        fields = ['content', 'grade', ]
-        widgets = {
-            'grade': forms.Select(choices=GRADE_POINT_CHOICES)
-        }
+        fields = ['content', ]

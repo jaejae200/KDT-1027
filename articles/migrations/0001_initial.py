@@ -33,6 +33,7 @@ class Migration(migrations.Migration):
             name='Comment',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('grade', models.IntegerField()),
                 ('content', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='articles.article')),

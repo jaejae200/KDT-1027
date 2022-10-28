@@ -3,16 +3,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_safe
-from .models import Article
+from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
+from django.core.paginator import Paginator
 
 # Create your views here.
 
 @require_safe
 def index(request):
+    page = request.GET.get('page', '1')
     articles = Article.objects.order_by('-pk')
+    paginator = Paginator(articles, 6)
+    page_obj = paginator.get_page(page)
     context = {
-        'articles': articles
+        'articles': articles, 
+        'articles_list' : page_obj,
     }
     return render(request, 'articles/index.html', context)
 
@@ -64,6 +69,12 @@ def update(request, pk):
         return redirect('articles:detail', article.pk)
 
 @login_required
+def delete(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    article.delete()
+    return redirect('articles:index')
+
+@login_required
 def comment_create(request, pk):
     print(request.POST)
     article = get_object_or_404(Article, pk=pk)
@@ -79,6 +90,14 @@ def comment_create(request, pk):
         }
         return JsonResponse(context)
 
+def comment_delete(request, article_pk, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    comment.delete()
+
+    return redirect('articles:detail', article_pk)
+
+    
+
 @login_required
 def like(request, pk):
     article = get_object_or_404(Article, pk=pk)
@@ -90,3 +109,4 @@ def like(request, pk):
         is_liked = True
     context = {'isLiked': is_liked, 'likeCount': article.like_users.count()}
     return JsonResponse(context)
+
