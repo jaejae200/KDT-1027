@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'django_extensions',
     'imagekit',
+    'django_seed',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -116,13 +117,18 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR/ 'static',
+]
+
 
 # Media files
 
